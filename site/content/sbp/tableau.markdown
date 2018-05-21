@@ -9,7 +9,7 @@ weight: 20
 
 |Author|XAP Version|Last Updated | Reference | Download |
 |------|-----------|-------------|-----------|----------|
-| Vitalii Zinchenko    | 12.2 | September 2017|  [Tableau](https://www.tableau.com/)  |     |
+| Vitalii Zinchenko    | 12.2 | May 2018|  [Tableau](https://www.tableau.com/)  |     |
 
 
 # Overview
@@ -33,22 +33,31 @@ In this example, a familiar `Simple - Superstore` Tableau users data set is used
 
 # Configuration
 
-## Setting Up the Space
+## Configuring InsightEdge for the Tableau demo
 
-In order to integrate Tableau with InsightEdge, you must have a XAP data grid that is up and running, and you need access to it. To start a data grid, follow the instructions provided in the [Local Machine Setup]({{%lateststartedurl%}}/insightedge-local-setup.html) topic of the [Getting Started]({{%lateststartedurl%}}/index.html) guide to launch the InsightEdge application, which includes the XAP data grid as a core component. 
+In order to integrate Tableau with InsightEdge, you must have a XAP data grid that is up and running, and you need access to it. InsightEdge application includes the XAP data grid as a core component.
 
 After you start your InsightEdge application, you must set up the system to run the Tableau demo.
 
-**To configure InsightEdge for the Tableau demo:**
+##### Deploying XAP Data Grid and Space
 
-1. In one of the XAP administration tools, create a Space with the name `tableauSpace`.
+On your local machine, run the following commands from the `$XAP_HOME\bin` directory:
+
+1. XAP data grid:
+    ```bash
+    insightedge host run-agent --auto --gsc=2
+    ```
+1. To create a Space with the name `tableauSpace`:
+    ```bash
+    insightedge space deploy --partitions=2 tableauSpace
+    ```
 1. Populate the `tableauSpace` Space with data: 
 
-	- [Download](/download_files/sbp/xap-sql-demo.rar) this file and build the sample.
-	- Execute the following command from the  "xap-sql-demo" folder using the command line interface: 
-
+	- [Download](/download_files/sbp/xap-sql-demo.rar) this file and unpack it
+	- Under the extracted "xap-sql-demo" folder, build the sample with `mvn clean install`
+	- Execute the following command:
 	```bash
-	java -jar target\xap-sql-demo.jar --space-url "jini://*/*/space?locators=<DATA_GRID_IP>" --lookup-group <DATA_GRID_LOOKUP_GROUP>
+	java -jar target\xap-sql-demo.jar --space-url "jini://*/*/tableauSpace?locators=<DATA_GRID_IP>" --lookup-group <DATA_GRID_LOOKUP_GROUP>
 	```
 
 	- Substitute  the values  in `<DATA_GRID_IP>` and `<DATA_GRID_LOOKUP_GROUP>` with appropriate values for your deployment.
@@ -101,6 +110,16 @@ At this point, your user account is updated and you have access to the ODBC-JDBC
 
 ### Configuring the ODBC-JDBC Gateway
 
+##### Add XAP Jdbc Client Jars to the Classpath
+When connecting to the data grid, Easysoft runs the xap-jdbc custom driver. In order to make the driver visible for Easysoft, follow these steps:
+
+1. In your InsightEdge root directory go to /insightedge/tools/jdbc
+
+1. Run the build-xap-jdbc-client.cmd script
+
+1. The script creates the file xap-jdbc-client.jar. This jar will be used in the next steps.
+
+
 After you have installed the gateway software and obtained a trial license, you have to configure the gateway to point to the required data source.
 
 **To configure the ODBC-JDBC gateway:**
@@ -109,7 +128,7 @@ After you have installed the gateway software and obtained a trial license, you 
 
 	{{%infosign%}} For instructions on how to access the ODBC Data Source Administrator, see this [Microsoft help topic]( https://docs.microsoft.com/en-us/sql/odbc/admin/odbc-data-source-administrator).
 
-1. On the right-hand side of the ODBC Data Source Administrator window, next to the list of User Data Sources, click **Add**.
+1. On the right-hand side of the ODBC Data Source Administrator window, go the System Data Sources tab, click **Add**.
 
 	<img src="/attachment_files/sbp/easysoft/odbc_data_source_administrator_1_3.png" width=478" height="339" />
 
@@ -122,8 +141,10 @@ After you have installed the gateway software and obtained a trial license, you 
 
 	- DSN: **easysoft-xap-odbc-jdbc**
 	- Driver Class: **com.gigaspaces.jdbc.Driver**
-	- Class Path: Add the class path(s) to your JAR files. 
-	- URL: **jdbc:xap:url=jini://*/*/<SPACE_NAME>?locators=127.0.0.1**
+	- Class Path: Leave field empty
+	- **IMPORTANT** - edit the CLASSPATH environment variable and append to it the path to your xap-jdbc-client.jar file. Create the CLASSPATH environment variable if it doesn't exist.
+	<img src="/attachment_files/sbp/easysoft/odbc_data_source_environment_variable_2_1.png" width=373" height="284" />
+	- URL: **jdbc:xap:url=jini://\*/\*/<SPACE_NAME>?locators=127.0.0.1**
 
 1. Check the **Strip Quote** check box.
 
