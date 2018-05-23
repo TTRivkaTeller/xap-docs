@@ -41,6 +41,12 @@ After you start your InsightEdge application, you must set up the system to run 
 
 ##### Deploying XAP Data Grid and Space
 
+Preparatory step: installing insightedge dependencies locally
+
+1. Run ${XAP_HOME}/tools/installmavenrep.bat script.
+
+1. Run ${XAP_HOME}/insightedge/tools/maven/insightedge-maven.cmd script.
+
 On your local machine, run the following commands from the `$XAP_HOME\bin` directory:
 
 1. XAP data grid:
@@ -57,10 +63,10 @@ On your local machine, run the following commands from the `$XAP_HOME\bin` direc
 	- Under the extracted "xap-sql-demo" folder, build the sample with `mvn clean install`
 	- Execute the following command:
 	```bash
-	java -jar target\xap-sql-demo.jar --space-url "jini://*/*/tableauSpace?locators=<DATA_GRID_IP>" --lookup-group <DATA_GRID_LOOKUP_GROUP>
+	java -jar target\xap-sql-demo.jar --space-url "jini://*/*/tableauSpace?locators=127.0.0.1" --lookup-group <DATA_GRID_LOOKUP_GROUP>
 	```
 
-	- Substitute  the values  in `<DATA_GRID_IP>` and `<DATA_GRID_LOOKUP_GROUP>` with appropriate values for your deployment.
+	- Substitute the value `<DATA_GRID_LOOKUP_GROUP>` with appropriate value for your deployment. lookup-group is optional.
 
 
 1. View the objects in the Space to verify that the data populated as expected.
@@ -106,6 +112,7 @@ After you install the Easysoft gateway on your machine, you have to request a tr
 
 	<img src="/attachment_files/sbp/easysoft/easysoft_data_license_manager_3.png" width=352" height="247" />
 	
+Look in your email spam section for the license.
 At this point, your user account is updated and you have access to the ODBC-JDBC gateway software for the duration of the trial license period.
 
 ### Configuring the ODBC-JDBC Gateway
@@ -113,11 +120,7 @@ At this point, your user account is updated and you have access to the ODBC-JDBC
 ##### Add XAP Jdbc Client Jars to the Classpath
 When connecting to the data grid, Easysoft runs the xap-jdbc custom driver. In order to make the driver visible for Easysoft, follow these steps:
 
-1. In your InsightEdge root directory go to /tools/maven. Run the installmavenrep.bat script.
-
-1. In your InsightEdge root directory go to /insightedge/tools/maven. Run the insightedge-maven.cmd script.
-
-1. In your InsightEdge root directory go to /insightedge/tools/jdbc. Run the build-xap-jdbc-client.cmd script.
+1. Navigate to ${XAP_HOME}/insightedge/tools/jdbc. Run the build-xap-jdbc-client.cmd script.
 
 1. The script creates the file xap-jdbc-client.jar. This jar will be used in the following steps.
 
@@ -148,7 +151,7 @@ After you have installed the gateway software and obtained a trial license, you 
 
 	<img src="/attachment_files/sbp/easysoft/odbc_data_source_environment_variable_2_1.png" width=373" height="284" />
 
-	- URL: **jdbc:xap:url=jini://\*/\*/<SPACE_NAME>?locators=127.0.0.1**
+	- URL: **jdbc:xap:url=jini://\*/\*tableauSpace?locators=127.0.0.1**
 
 1. Check the **Strip Quote** check box.
 
