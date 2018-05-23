@@ -113,11 +113,13 @@ At this point, your user account is updated and you have access to the ODBC-JDBC
 ##### Add XAP Jdbc Client Jars to the Classpath
 When connecting to the data grid, Easysoft runs the xap-jdbc custom driver. In order to make the driver visible for Easysoft, follow these steps:
 
-1. In your InsightEdge root directory go to /insightedge/tools/jdbc
+1. In your InsightEdge root directory go to /tools/maven. Run the installmavenrep.bat script.
 
-1. Run the build-xap-jdbc-client.cmd script
+1. In your InsightEdge root directory go to /insightedge/tools/maven. Run the insightedge-maven.cmd script.
 
-1. The script creates the file xap-jdbc-client.jar. This jar will be used in the next steps.
+1. In your InsightEdge root directory go to /insightedge/tools/jdbc. Run the build-xap-jdbc-client.cmd script.
+
+1. The script creates the file xap-jdbc-client.jar. This jar will be used in the following steps.
 
 
 After you have installed the gateway software and obtained a trial license, you have to configure the gateway to point to the required data source.
@@ -143,7 +145,9 @@ After you have installed the gateway software and obtained a trial license, you 
 	- Driver Class: **com.gigaspaces.jdbc.Driver**
 	- Class Path: Leave field empty
 	- **IMPORTANT** - edit the CLASSPATH environment variable and append to it the path to your xap-jdbc-client.jar file. Create the CLASSPATH environment variable if it doesn't exist.
+
 	<img src="/attachment_files/sbp/easysoft/odbc_data_source_environment_variable_2_1.png" width=373" height="284" />
+
 	- URL: **jdbc:xap:url=jini://\*/\*/<SPACE_NAME>?locators=127.0.0.1**
 
 1. Check the **Strip Quote** check box.
@@ -159,6 +163,8 @@ After you have installed the gateway software and obtained a trial license, you 
 
 
 ## Setting Up Tableau
+
+Download and install [Tableau](https://www.tableau.com/) desktop.
 
 After the XAP data grid has been populated with the sample data, and the ODBC-JDBC Gateway has been configured to connect to InsightEdge, you can configure Tableau to read the data and display it in a graphic visual format. You can then query the data grid and see the activity that occurs under the hood when Tableau accesses XAP as a SQL database and reads the requested data. 
 
